@@ -182,8 +182,12 @@ class SplitMat:
         return diff
 
     def distance(self, other):
-        diff = self.weighted_difference(other)
+        diff = self - other
         mat = np.square(diff.mat)
+        dim_lengths = [d.lengths for d in diff.dimensions]
+        for row, r_weight in enumerate(dim_lengths[0]):
+            for col, c_weight in enumerate(dim_lengths[1]):
+                mat[row, col] = mat[row, col] * r_weight * c_weight
         combined = np.sum(mat)
         return math.sqrt(combined)
 
